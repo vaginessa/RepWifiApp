@@ -1,11 +1,11 @@
-Copyright 2017 Filippo "Fil" Bergamo
-
-This is the README file of "RepWifiApp".
 
 RepWifiApp is free software, released under GPLv3.
+Copyright 2017 Filippo "Fil" Bergamo.
 
 RepWifiApp is developed as a contribution to the Replicant Project.
+
 It aims to provide a user-friendly graphical access to Libre WiFi connectivity.
+
 It exposes basic functions to search for available netwroks and conenct to them.
 
 Thank GNUs:
