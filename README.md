@@ -1,4 +1,3 @@
-
 Copyright 2017 Filippo "Fil" Bergamo
 
 This is the README file of "RepWifiApp".
