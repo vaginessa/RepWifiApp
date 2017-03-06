@@ -1,4 +1,3 @@
-
 RepWifiApp is free software, released under GPLv3.
 Copyright 2017 Filippo "Fil" Bergamo.
 
@@ -17,5 +16,5 @@ for having done the initial job of porting libre WiFi to Replicant 4.2.
 for porting libre WiFi to Replicant 6.0 and for helping with the scripts.
 
 To report on bugs, request features, or any help request, please refer to:
-the Replicant's Forum:
-"http://redmine.replicant.us/projects/replicant/boards"
+
+Replicant's Forum: "http://redmine.replicant.us/projects/replicant/boards"
