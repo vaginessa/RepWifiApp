@@ -17,4 +17,4 @@ for porting libre WiFi to Replicant 6.0 and for helping with the scripts.
 
 To report on bugs, request features, or any help request, please refer to:
 
-Replicant's Forum: "http://redmine.replicant.us/projects/replicant/boards"
+Replicant's Forum: "http://redmine.replicant.us/boards/9/topics/14079"
