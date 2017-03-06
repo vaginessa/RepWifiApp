@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<previews>
+
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+    <preview
+        name="Config1"
+        activity="com.example.repwifiapp.CreditsActivity"
+        config="layout-sw320dp-w320dp-h533dp-normal-long-port-notnight-hdpi-finger-keyssoft-nokeys-navexposed-trackball-800x480-v17"
+        device="3.7in WVGA (Nexus One)"
+        devicestate="Portrait"
+        target="Android 4.2.2"
+        theme="@style/AppTheme" >
+    </preview>
+
+</previews>

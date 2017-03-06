@@ -1,0 +1,17 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/ThemeDark">
+
+   <TextView
+        android:id="@+id/txt_credits"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:textColor="@color/ThemeLight"
+        android:textColorLink="@color/ThemeLight"
+        android:textSize="7pt"
+        android:scrollbars = "vertical" />
+
+
+</LinearLayout>

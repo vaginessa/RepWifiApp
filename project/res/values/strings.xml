@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RepWifi App</string>
+    <string name="menu_credits">Info and Credits</string>
+    <string name="scan_networks">Scan for Networks</string>
+    <string name="title_activity_select_network">Select Network</string>
+    <string name="rescan">Repeat Scan</string>
+    <string name="button_text_next">Next &gt;</string>
+    <string name="insert_nets_password">Insert a Password to connect to:</string>
+    <string name="show_password">Show password</string>
+    <string name="title_activity_connect">ConnectActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_show_status">Connection status</string>
+    <string name="back_main">Back to main</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="force_disconnect">Force Disconnection</string>
+    <string name="title_activity_long_task">LongTaskActivity</string>
+    <string name="title_activity_manage_networks">ManageNetworksActivity</string>
+    <string name="delete">Delete network info</string>
+    <string name="manage_networks">Manage Networks</string>
+    <string name="title_activity_credits">Credits</string>
+    <string name="credit_text">Copyright 2017 Filippo \&quot;Fil\&quot; Bergamo&lt;br/&gt;&lt;br/&gt;This app is Free Software.&lt;br/&gt;It\'s licensed under the terms of &lt;a href=&quot;https://www.gnu.org/licenses/gpl.txt&quot;&gt;GPL v3&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;This app is developed as a contribution to &lt;br/&gt;&lt;a href=&quot;http://www.replicant.us&quot;&gt;The Replicant Project&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;&lt;u&gt;&lt;big&gt;Thank GNUs:&lt;/big&gt;&lt;/u&gt;&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Tibi \&quot;tct\&quot; Turbureanu&lt;/b&gt;&lt;br/&gt;for having done the initial job of porting libre WiFi to Replicant 4.2.&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Wolfgang Wiedmeyer&lt;/b&gt;&lt;br/&gt;for porting libre WiFi to Replicant 6.0 and for helping with the scripts.&lt;br/&gt;&lt;br/&gt;To report on bugs, request features, or any help request, please refer to:&lt;br/&gt;&lt;a href=&quot;http://redmine.replicant.us/projects/replicant/boards&quot;&gt;Replicant\'s Forum&lt;/a&gt;&lt;br/&gt;</string>
+
+</resources>
