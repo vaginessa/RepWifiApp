@@ -1,0 +1,10 @@
+
+## [0.0.9] - 2016-03.06
+Published the first, alpha, release.
+on Replicant 6.0:
+    -network discovery WORKS.
+    -connect to WPA-secured network WORKS.
+    -connect to unsecured network WORKS.
+
+on Replicant 4.2:
+    -all the work is still in progress. Nothing functional yet.
