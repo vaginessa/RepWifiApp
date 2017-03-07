@@ -1,6 +1,14 @@
 RepWifiApp is free software, released under GPLv3.
 Copyright 2017 Filippo "Fil" Bergamo.
 
+All icons and images included in RepWifiApp are licensed under:
+Creative Commons Attribution-ShareAlike 3.0 Unported license
+and are Copyright 2017 Filippo "Fil" Bergamo.
+
+RepWifiApp icons are a derived work from the original Replicant logo.
+The Replicant logo is Copyright 2011 Mirella Vedovetto, Copyright 2012 Paul Kocialkowski
+
+
 RepWifiApp is developed as a contribution to the Replicant Project.
 
 It aims to provide a user-friendly graphical access to Libre WiFi connectivity.
