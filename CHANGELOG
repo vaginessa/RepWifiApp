@@ -1,3 +1,10 @@
+## [0.0.9(1)] - 2016-03-11 
+*) enabled debug settings -> log priority level
+*) added warnings for root disabled/denied
+*) added warnings for external adapter not found
+*) fixed bug that allowed only 1 network to be saved
+*) changed default command execution from "su" to "shell" user, for commands that don't really need root privileges.
+*) removed "App" from application's title.
 
 ## [0.0.9] - 2016-03.06
 Published the first, alpha, release.
