@@ -57,6 +57,7 @@ public class LongTaskActivity extends Activity {
 
 		}
 
+		@Override
 		protected void onPostExecute(Object result) {
 			taskCompleted(result, this.REQ_CODE);
 		}

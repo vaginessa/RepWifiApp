@@ -20,19 +20,28 @@
 
 package fil.libre.repwifiapp;
 
-import java.io.File;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import fil.libre.repwifiapp.helpers.Engine4p2;
 import fil.libre.repwifiapp.helpers.Engine6p0;
 import fil.libre.repwifiapp.helpers.IEngine;
 import fil.libre.repwifiapp.helpers.NetworkManager;
+import fil.libre.repwifiapp.helpers.Utils;
 
 
 
 public abstract class Commons {
 
-		
+	private static Context currentContext;
+	public Context getContext(){
+		return currentContext;
+	}
+	
 	//------------- Enviromnet Constants ----------------------------------------
+	public static final int EXCOD_ROOT_DISABLED = 255;
+	public static final int EXCOD_ROOT_DENIED = 1;
 	public static final String v4p2 = "4.2";
 	public static final String v6p0 = "6.0";
 	public static final String SCAN_FILE_HDR = "bssid / frequency / signal level / flags / ssid";
@@ -57,7 +66,19 @@ public abstract class Commons {
 	public static int colorThemeDark;
 	public static int colorThemeLight;
 	public static int colorBlack;
+	
+	public static int getLogPriority(){
+		
+		SharedPreferences sets = getSettings();
+		return Integer.parseInt(sets.getString("debug_priority","3"));
+		
+	}
+	
+	public static SharedPreferences getSettings(){
+		return PreferenceManager.getDefaultSharedPreferences(currentContext);
+	}
 	//----------------------------------------------------
+	
 	
 	//------------- Activity Interaction -----------------
 	public static final String EXTRA_APINFO = "ExAPInfo";
@@ -85,12 +106,7 @@ public abstract class Commons {
 
 	//----------------- Application Files --------------------
 	private static String APP_DATA_FOLDER;
-	public static void setAppDataFolder(String path){
-		File f = new File(path);
-		if (f.exists()){
-			APP_DATA_FOLDER = path;
-		}		
-	}
+	
 	public static String getNetworkStorageFile(){
 		if (APP_DATA_FOLDER == null){
 			return null;
@@ -123,10 +139,28 @@ public abstract class Commons {
 	
 	
 	//----------- Initialization methods ---------------------------
-	public static void initObjects()throws Exception{
+	public static boolean init(Context context){
 		
-		initEngine();
-		initNetworkStorage();
+		currentContext = context;
+		
+		try {
+			
+
+			colorThemeDark = currentContext.getResources().getColor(R.color.ThemeDark);
+			colorThemeLight = currentContext.getResources().getColor(R.color.ThemeLight);
+			colorBlack = currentContext.getResources().getColor(R.color.black);
+			APP_DATA_FOLDER = currentContext.getExternalFilesDir(null).getAbsolutePath();
+			
+			initEngine();
+			initNetworkStorage();
+					
+			
+			return true;
+			
+		} catch (Exception e) {
+			Utils.logError("Error initializing common resources.",e);
+			return false;
+		}
 	}
 	
 	private static void initEngine() throws Exception{

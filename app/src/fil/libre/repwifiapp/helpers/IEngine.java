@@ -37,5 +37,8 @@ public interface IEngine {
 	
 	public ConnectionStatus getConnectionStatus();
 	
-		
+	public boolean isInterfaceAvailable(String ifaceName);
+	
+	public String[] getAvailableInterfaces();	
+	
 }

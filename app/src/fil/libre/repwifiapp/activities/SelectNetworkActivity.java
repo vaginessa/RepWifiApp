@@ -192,7 +192,7 @@ public class SelectNetworkActivity extends Activity implements OnClickListener {
 	private void addButtonForNetwork(AccessPointInfo info){
 		
 		TableLayout s = (TableLayout)findViewById(R.id.table_networks);
-		TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+		TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		TableRow row = new TableRow(this);
 		TableRow.LayoutParams rowParams = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		rowParams.gravity = Gravity.FILL_HORIZONTAL;

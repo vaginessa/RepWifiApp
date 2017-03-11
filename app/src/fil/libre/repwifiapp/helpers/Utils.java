@@ -27,15 +27,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import fil.libre.repwifiapp.Commons;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 public class Utils {
 
 	private static final long MILLIS_IN_DAY = 86400000;
 	
-	public static final int logLevel = 1;
-	
+
 	public static final String APP_NAME = "RepWifi";
 		
 	private static Exception _lastException = null;
@@ -58,13 +64,14 @@ public class Utils {
 	
 	public static void logDebug(String msg, int level){
 		
-		if (level < logLevel){
+		if (level < Commons.getLogPriority()){
 			return;
 		}
 		
 		Log.d(APP_NAME,msg);
 	}
 	
+
 	public static boolean writeFile(String filePath, String text, boolean overwrite){
 		
 			

@@ -20,11 +20,15 @@
 
 package fil.libre.repwifiapp.helpers;
 
+import java.util.ArrayList;
 import fil.libre.repwifiapp.Commons;
 
 
 public abstract class Engine implements IEngine{
 
+	public static final String DNS1 = "193.183.98.154";
+	public static final String DNS2 = "87.98.175.85";
+	
 	protected String getCmdWpaSup(){
 		return "wpa_supplicant -B -dd -i" + Commons.INTERFACE_NAME + " -C\"" +Commons.SOCKET_DIR + "\" -P\"" + Commons.PID_FILE + "\"";
 	}
@@ -34,10 +38,7 @@ public abstract class Engine implements IEngine{
 	}
 		
 	protected abstract String getCmdWpaStart();
-	
-	public static final String DNS1 = "193.183.98.154";
-	public static final String DNS2 = "87.98.175.85";
-		
+			
 	public boolean deleteFileIfExists(String filePath){
 
 		if (filePath == null){
@@ -54,16 +55,21 @@ public abstract class Engine implements IEngine{
 			return false;
 		}
 
+		//needs root (it only gets used by the 4p2 engine, working in /data/misc/wifi)
 		return executeRootCmd("if [ -e \""+ filePath + "\" ]; then rm \"" + filePath + "\"; fi");
+		
 	}
 
 	public boolean chmodFile(String filePath, String mod){
+		//needs root (chmod)
 		return executeRootCmd("chmod " + mod + " \"" + filePath + "\"");
 	}
 
 	@Override
 	public boolean killPreviousConnections() {
 
+		//needs root (for killall)
+		
 		Utils.logDebug("killing wpa_supplicant..:");
 		if (executeRootCmd("killall -SIGINT wpa_supplicant")){
 			Utils.logDebug("Killed wpa_supplicant"); 
@@ -86,6 +92,8 @@ public abstract class Engine implements IEngine{
 	@Override
 	public boolean clearWorkingDir(){
 
+		//needs root (to work within /data/misc/wifi)
+		
 		Utils.logDebug("clearWorkingDir():");
 
 		if (executeRootCmd("rm -r " + Commons.SOCKET_DIR)){
@@ -122,6 +130,7 @@ public abstract class Engine implements IEngine{
 
 		Utils.logDebug("startWpaSupplicant():");
 
+		//needs root (for wpa_supplicant)
 		if (executeRootCmd(getCmdWpaSup())){
 			return true;
 		}else{
@@ -138,6 +147,7 @@ public abstract class Engine implements IEngine{
 		
 		killPreviousConnections();
 		
+		//is it really necessary??? --- Fil
 		if (! clearWorkingDir()){
 			Utils.logError("Failed clearing dir");
 			return null;
@@ -163,8 +173,8 @@ public abstract class Engine implements IEngine{
 			return null;
 		}
 
-		//chmod 666 scan_file to make it readable
-		if (!chmodFile(Commons.getScanFile(), "666")){
+		//chmod 664 scan_file to make it readable
+		if (!chmodFile(Commons.getScanFile(), "664")){
 			Utils.logError("failed chmodding scan_file");
 			return null;
 		}
@@ -174,7 +184,6 @@ public abstract class Engine implements IEngine{
 			Utils.logError("Unable to parse scan file into AccessPointInfo array");
 		}
 
-		
 		return a;
 
 	}
@@ -185,6 +194,8 @@ public abstract class Engine implements IEngine{
 	@Override
 	public boolean disconnect(){
 
+		//needs root (for wpa_cli)
+		
 		if (! isWpaSupplicantRunning()){
 			return true;
 		}
@@ -248,14 +259,97 @@ public abstract class Engine implements IEngine{
 		
 	}
 
+	@Override
+	public boolean isInterfaceAvailable(String ifaceName){
+		
+		String[]ifaces = getAvailableInterfaces();
+		if(ifaces == null || ifaces.length == 0){
+			return false;
+		}
+		
+		for(String name : ifaces){
+			if (name.equals(ifaceName)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	@Override
+	public String[] getAvailableInterfaces(){
+		
+		try {
+			
+			ShellCommand cmd = new ShellCommand("ip link");
+			if (cmd.execute() == 0){
+				
+				String out = cmd.getOutput();
+				if (out == null || out.contains("\n") == false){
+					Utils.logDebug("No out from ip link");
+					return null;
+				}
+
+				ArrayList<String> list = new ArrayList<String>();
+				
+				String[] lines = out.split("\n");
+				for (String l : lines){
+					
+					String[] fields = l.split(":");
+					if (fields.length != 3){
+						continue;
+					}
+					
+					String interfName = fields[1].trim();
+					list.add(interfName);
+					
+				}
+				
+				String[] retArr = new String[list.size()];
+				retArr = list.toArray(retArr);
+				
+				return retArr;
+				
+			}
+			else{
+				return null;
+			}
+						
+		} catch (Exception e) {
+			Utils.logError("Error while querying ip link", e);
+			return null;
+		}
+		
+	}
+	
 	public boolean runDhcpcd(){
 		
+		//needs root
 		return executeRootCmd("dhcpcd " + Commons.INTERFACE_NAME);
 						
 	}
 
 	public boolean interfaceUp(){
+		//needs root (tested)
 		return executeRootCmd("ifconfig " + Commons.INTERFACE_NAME + " up");
+	}
+	
+	protected boolean executeCmd(String cmd){
+		
+		try {
+
+			ShellCommand c = new ShellCommand(cmd);
+			if ( c.execute() == 0){
+				return true;
+			}else {
+				return false;
+			}
+
+		} catch (Exception e) {
+			Utils.logError("Error executing \"" + cmd + "\"",e);
+			return false;
+		}
+		
 	}
 	
 	protected boolean executeRootCmd(String cmd){
@@ -306,12 +400,14 @@ public abstract class Engine implements IEngine{
 
 	protected boolean scanNetworks(){
 
+		//needs root (for wpa_supplicant and wpa_cli)
 		return executeRootCmd("bash " + Commons.getScriptScan());
 		
 	}
 
 	protected boolean getScanResults(){
 
+		//needs root (for wpa_supplicant and wpa_cli)
 		return executeRootCmd("bash " + Commons.getScriptScanRes());
 	
 	}
@@ -336,11 +432,6 @@ public abstract class Engine implements IEngine{
 					"sleep 1s\n";
 
 			
-			//Try to create and chmod script scan
-		/*	executeRootCmd("echo > " + Commons.getSCRIPT_SCAN());
-			chmodFile(Commons.getSCRIPT_SCAN(), "666");*/
-			
-			
 			if (! Utils.writeFile(Commons.getScriptScan(),scan,true) ){
 
 				Exception e = Utils.getLastException();
@@ -351,9 +442,6 @@ public abstract class Engine implements IEngine{
 				return false;
 			}
 
-			//Try to create and chmod script scanres
-			/*executeRootCmd("echo > " + Commons.getSCRIPT_SCANRES());
-			chmodFile(Commons.getSCRIPT_SCANRES(), "666");*/
 			
 			if (! Utils.writeFile(Commons.getScriptScanRes(),scanRes,true) ){
 
@@ -376,22 +464,5 @@ public abstract class Engine implements IEngine{
 
 	}
 	
-	/*protected boolean createDhcpcdScritp(){
-		
-		String scriptDhcp = "dhcpcd "+ Commons.INTERFACE_NAME + "\n" +
-				"sleep 3s\n";
 
-		if (! Utils.writeFile(Commons.getScriptDhcpcd(),scriptDhcp,true) ){
-
-			Exception e = Utils.getLastException();
-			if (e != null){
-				Utils.logError("Error while writing dhcpcd script.",e);
-			}
-
-			return false;
-		}
-		
-		return true;
-		
-	}*/
 }

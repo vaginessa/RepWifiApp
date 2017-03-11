@@ -180,6 +180,7 @@ public class Engine6p0 extends Engine{
 	}
 	
 	private boolean destroyNetwork(){
+		//needs root (tested)
 		return executeRootCmd("ndc network destroy 1");
 	}
 	
@@ -187,6 +188,7 @@ public class Engine6p0 extends Engine{
 		
 		try {
 			
+			//needs root (wpa_cli)
 			RootCommand su = new RootCommand(getCmdWpaCli() + " set_network " + networkID + " ssid '\"" + ssid + "\"'" );
 			if (su.execute() == 0){
 				String out = su.getOutput();
@@ -210,6 +212,8 @@ public class Engine6p0 extends Engine{
 	private boolean setNetworkPSK(AccessPointInfo info, String networkID){
 		
 		try {
+			
+			//needs root (wpa_cli)
 			
 			String cmdSetPass = null;
 			if (info.needsPassword()){
@@ -244,6 +248,7 @@ public class Engine6p0 extends Engine{
 		
 		try {
 
+			//needs root (wpa_cli)
 			RootCommand su = new RootCommand(getCmdWpaCli() + " select_network " + networkID);
 			if (su.execute() == 0){
 				String out = su.getOutput();
@@ -268,6 +273,8 @@ public class Engine6p0 extends Engine{
 		
 		try {
 
+			//needs root (wpa_cli)
+			
 			RootCommand su = new RootCommand(getCmdWpaCli() + " enable_network " + networkID);
 			if (su.execute() == 0){
 				String out = su.getOutput();
@@ -292,6 +299,8 @@ public class Engine6p0 extends Engine{
 		
 		try {
 
+			//needs root (wpa_cli)
+			
 			RootCommand su = new RootCommand(getCmdWpaCli() + " reassociate");
 			if (su.execute() == 0){
 				String out = su.getOutput();
@@ -316,14 +325,15 @@ public class Engine6p0 extends Engine{
 		
 		try {
 			
-			RootCommand su = new RootCommand("ip route show dev " + Commons.INTERFACE_NAME);
-			if (su.execute() != 0){
+			//doesn't need root (tested)
+			ShellCommand cmd = new ShellCommand("ip route show dev " + Commons.INTERFACE_NAME);
+			if (cmd.execute() != 0){
 				Utils.logDebug("command failed show route");
 				return null;
 			}
 			
 			//read command output
-			String out = su.getOutput();
+			String out = cmd.getOutput();
 			if (out == null){
 				return null;
 			}
@@ -354,6 +364,7 @@ public class Engine6p0 extends Engine{
 	}
 	
 	private boolean clearAddrs(){
+		//needs root (tested)
 		return executeRootCmd("ndc interface clearaddrs " + Commons.INTERFACE_NAME);
 	}
 	

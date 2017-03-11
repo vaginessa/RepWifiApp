@@ -51,7 +51,7 @@ public class RootCommand {
 
 		if ( this._cmdTxt != null ){
 			
-			Utils.logDebug("EXEC: " + this._cmdTxt);
+			Utils.logDebug("SU:EXEC: " + this._cmdTxt);
 						
 			this._cmdTxt += " > " + Commons.getTempOutFile();
 			

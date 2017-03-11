@@ -102,16 +102,21 @@ public class NetworkDetailsActivity extends Activity implements OnCheckedChangeL
 	
 	public void btnDeleteClick(View v){
 		
+		String msg = getResources().getString(R.string.msg_confirm_delete_network);
+		String yes = getResources().getString(R.string.yes);
+		String no = getResources().getString(R.string.no);
 		
 		AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);                      
-	    dlgAlert.setMessage("Are you sure you want to delete this network?"); 
-	    dlgAlert.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int whichButton) {
+	    dlgAlert.setMessage(msg); 
+	    dlgAlert.setPositiveButton(yes,new DialogInterface.OnClickListener() {
+	        @Override
+			public void onClick(DialogInterface dialog, int whichButton) {
 	             returnResult(true);
 	        }
 	   });
-	    dlgAlert.setNegativeButton("NO",new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int whichButton) {
+	    dlgAlert.setNegativeButton(no,new DialogInterface.OnClickListener() {
+	        @Override
+			public void onClick(DialogInterface dialog, int whichButton) {
 	        	 //nothing
 	        }
 	   });

@@ -36,10 +36,11 @@ import fil.libre.repwifiapp.helpers.RootCommand;
 import fil.libre.repwifiapp.helpers.Utils;
 
 import android.os.Bundle;
+import android.R.integer;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,34 +50,52 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity{
 	
+	private AlertDialog diag;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		setImage();
-		setupSharedResources();
-				
-		RootCommand su = new RootCommand(null);
-		try {
-			su.execute();
-		} catch (Exception e) {
-			Utils.logError("Error while trying to get first Super User access. Aborting.",e);
+		if(! Commons.init(this)){
+			Utils.logDebug("Failed to initialize Commons. Aborting.");
 			finish();
-		}		
-	
-		try {
-			Commons.initObjects();
-		} catch (Exception e) {
-			Utils.logError("Error on creating engine. Aborting.",e);
-			finish();
+			return;
 		}
-
-
-		checkConnectionStatus();
 		
-					
+		setImage();
+
+		//checkConnectionStatus();
+							
 	}
+	
+	@Override
+	public void onStart(){
+		super.onStart();
+		Utils.logDebug("Main onStart()");
+		
+		checkConditions();
+		
+		ConnectionStatus status = Commons.connectionEngine.getConnectionStatus();
+		if (status != null && status.isConnected()){
+			Utils.logDebug("Main about to launch status activity...");
+			launchStatusActivity(status);
+		}
+		
+		Utils.logDebug("Main onStart() returning.");
+			
+	}
+	
+	@Override
+	public void onStop(){
+		super.onStop();
+		
+		if (this.diag != null){
+			this.diag.dismiss();
+		}
+		
+	}
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,23 +110,19 @@ public class MainActivity extends Activity{
 	    switch (item.getItemId()) {
 	    case R.id.menu_credits:
 	        launchCreditsActivity();
-	        return true;
+	        break;
+	        
+	    case R.id.menu_config:
+	    	launchSettingsActivity();
+	    	break;
 	    
 	    default:
-	        return true;
+	       	break;
 	    }
+	    
+	    return true;
 	}
 	
-	@Override
-	public void onRestart(){
-		super.onRestart();
-		
-		ConnectionStatus status = Commons.connectionEngine.getConnectionStatus();
-		if (status != null && status.isConnected()){
-			launchStatusActivity(status);
-		}
-			
-	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent){
@@ -134,7 +149,7 @@ public class MainActivity extends Activity{
 			break;
 
 		case RequestCode.SELECT_CONN:
-			boolean rescan = (boolean)intent.getExtras().getBoolean(Commons.EXTRA_RESCAN);
+			boolean rescan = intent.getExtras().getBoolean(Commons.EXTRA_RESCAN);
 			handleResultSelect(i, rescan);
 			break;
 			
@@ -187,13 +202,7 @@ public class MainActivity extends Activity{
 		
 	}
 	
-	private void setupSharedResources(){
-		Commons.colorThemeDark = getResources().getColor(R.color.ThemeDark);
-		Commons.colorThemeLight = getResources().getColor(R.color.ThemeLight);
-		Commons.colorBlack = getResources().getColor(R.color.black);
-		Commons.setAppDataFolder(getExternalFilesDir(null).getAbsolutePath());
-	}
-	
+
 	private void handleResultSelect(AccessPointInfo i, boolean rescan){
 		
 		if (rescan){
@@ -304,11 +313,15 @@ public class MainActivity extends Activity{
 	}
 	
 	private void launchCreditsActivity(){
-		
 		Intent intent = new Intent(this, CreditsActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		startActivityForResult(intent, RequestCode.NONE);
-		
+	}
+	
+	private void launchSettingsActivity() {
+		Intent intent = new Intent(this, SettingsActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		startActivity(intent);
 	}
 	
 	private void deleteNetwork(AccessPointInfo info){
@@ -345,7 +358,73 @@ public class MainActivity extends Activity{
 		
 	}
 	
+	private boolean checkConditions(){
+		return (checkRootEnabled() && checkInterface());
+	}
+	
+	private boolean checkInterface(){
+		
+		boolean res = Commons.connectionEngine.isInterfaceAvailable(Commons.INTERFACE_NAME);
+				
+		if(res == false ){
+			String msg = getResources().getString(R.string.msg_interface_not_found);
+			showMessage(msg);
+		}
+		
+		return res;
+				
+	}
+	
+	private boolean checkRootEnabled(){
+		
+		boolean result = false;
+		String msg = "Unknown Root error";
+		RootCommand su = new RootCommand(null);
+		
+		int excode = -1;
+		
+		try {
+			excode = su.execute();
+		} catch (Exception e) {
+			Utils.logError("Error while trying to get first Super User access.",e);
+			excode = -1;
+			result = false;
+		}
+			
+		switch (excode) {
+			case 0:
+				result = true;
+				break;
+				
+			case Commons.EXCOD_ROOT_DENIED:
+				result = false;
+				msg = getResources().getString(R.string.msg_root_denied);
+				break;
+				
+			case Commons.EXCOD_ROOT_DISABLED:
+				result = false;
+				msg = getResources().getString(R.string.msg_root_disabled);
+				break;
+				
+			default:
+				result = false;
+				msg = "Unknown Root error.\nExit code " + excode;
+				break;
+		}
+		
+		if (!result){
+			showMessage(msg);
+		}
+
+		return result;
+				
+	}
+	
 	private void doScan(){
+		
+		if (!checkConditions()){
+			return;
+		}
 		
 		Intent intent = new Intent(this, LongTaskActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -373,6 +452,23 @@ public class MainActivity extends Activity{
 			launchSelectActivity(infos, false);
 		}
 		
+	}
+	
+	private void showMessage(String msg){
+		
+		AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);                      
+	    dlgAlert.setMessage(msg); 
+	    dlgAlert.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+	        @Override
+			public void onClick(DialogInterface dialog, int whichButton) {
+	        	return;
+	        }
+	    });
+	    
+	    dlgAlert.setCancelable(false);
+	    this.diag = dlgAlert.create();
+	    this.diag.show();
+	    
 	}
 		
 }

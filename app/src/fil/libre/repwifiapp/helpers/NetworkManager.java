@@ -109,32 +109,40 @@ public class NetworkManager {
 			}
 			
 		}
+		
+		
+		if (save){
+			//add the updated info to the storage
+			info.setLastTimeUsed(System.currentTimeMillis());
+			newlist.add(info);
+		}
 
 		for(AccessPointInfo old : existingNets){
 
 			if (old == null){
+				//error while loading from file. skip.
 				continue;
 			}
-
-			if (old.getBSSID().equals(info.getBSSID()) && old.getSSID().equals(info.getSSID())){
-
-				//found previous entry for this network,
-				//if the call is for saving, overwrite the entry with the new one,
-				//else omit the line, to remove network from the saved list.
-				if (save){
-					info.setLastTimeUsed(System.currentTimeMillis());
-					newlist.add(info);
-				}
-
-			}else{
-				//other network, keep it in the file
-				// only if it's not older than the max age for a network 
-				if (! info.isOlderThan(NET_MAX_AGE)){
-					newlist.add(old);
-				}
+		
+			// keep network only if it's not older than the max age for a network 
+			else if (old.isOlderThan(NET_MAX_AGE)){
+				//skip it
+				continue;
 			}
-
+			
+			else if (old.getBSSID().equals(info.getBSSID()) && old.getSSID().equals(info.getSSID())){
+				//found previously saved entry for the same network we are managing
+				//skip it
+				continue;
+			}
+			
+			else{
+				//old network info that can be kept in the storage
+				newlist.add(old);
+			}
+			
 		}
+		
 
 		AccessPointInfo[] newContents = new AccessPointInfo[newlist.size()];
 		newContents = newlist.toArray(newContents);
@@ -240,7 +248,7 @@ public class NetworkManager {
 		}
 
 		String[] lines = Utils.readFileLines(_knownNetworksFile);
-		if (lines.length == 0){
+		if (lines == null || lines.length == 0){
 			return null;
 		}
 		
