@@ -1,0 +1,5 @@
+*) Research on the way to "trick" the system into thinking wifi is connected.
+*) Replace string literals with @string resources.
+*) [LOW-priority] Research on udev support in Replicant, to load the app when the dongle gets plugged in.
+*) [LOW-priority] Implement and test specific behavior for Replicant 4.2
+*) [LOW-priority] Introduce support for WEP-secured networks.
