@@ -26,3 +26,12 @@ for porting libre WiFi to Replicant 6.0 and for helping with the scripts.
 To report on bugs, request features, or any help request, please refer to:
 
 Replicant's Forum: "http://redmine.replicant.us/boards/9/topics/14079"
+
+Compiled APKs are released in the same page linked above.
+APKs are signed with this GnuPG key:
+
+Key ID: CD07CEAD
+
+Owner: Filippo Bergamo (AKA Fil)
+
+Fingerprint: 2D36 719C A4B8 3C7A DD9D  33AE A02A 2F68 CD07 CEAD
