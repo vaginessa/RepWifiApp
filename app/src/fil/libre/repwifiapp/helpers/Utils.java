@@ -27,21 +27,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import fil.libre.repwifiapp.Commons;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 public class Utils {
 
 	private static final long MILLIS_IN_DAY = 86400000;
 	
-
 	public static final String APP_NAME = "RepWifi";
 		
 	private static Exception _lastException = null;
@@ -73,10 +65,10 @@ public class Utils {
 	
 
 	public static boolean writeFile(String filePath, String text, boolean overwrite){
-		
-			
+					
 		FileWriter writer = null;
 		boolean retval = false;
+		
 		try {
 			
 			writer = new FileWriter(filePath, (! overwrite));
@@ -94,7 +86,7 @@ public class Utils {
 				try {
 					writer.close();
 				} catch (IOException e) {
-					//suppress
+					logError("error while closing filewriter",e);
 				}
 			}		
 					
@@ -112,6 +104,7 @@ public class Utils {
 		
 		FileWriter writer = null;
 		boolean retval = false;
+		
 		try {
 			
 			writer = new FileWriter(filePath, (! overwrite));
@@ -136,7 +129,7 @@ public class Utils {
 				try {
 					writer.close();
 				} catch (IOException e) {
-					//suppress
+					logError("error while closing filewriter",e);
 				}
 			}		
 					
@@ -169,6 +162,7 @@ public class Utils {
 			fr = new FileReader(filePath);
 			bufr = new BufferedReader(fr);
 	        String line ="";
+	        
 	        while((line = bufr.readLine()) != null){
 	            lines.add(line);
 	        }
@@ -186,14 +180,14 @@ public class Utils {
 					bufr.close();
 				}
 			} catch (IOException ex) {
-				//suppress
+				logError("error while closing filereader",ex);
 			}
 			try {
 				if (fr != null){
 					fr.close();
 				}
 			}catch(IOException exc){
-				//suppress
+				logError("error while closing filereader",exc);
 			}
 		}
         

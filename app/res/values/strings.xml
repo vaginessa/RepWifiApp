@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">RepWifi App</string>
+    <string name="app_name">RepWifi</string>
     <string name="menu_credits">Info and Credits</string>
     <string name="scan_networks">Scan for Networks</string>
     <string name="title_activity_select_network">Select Network</string>
@@ -21,5 +21,13 @@
     <string name="manage_networks">Manage Networks</string>
     <string name="title_activity_credits">Credits</string>
     <string name="credit_text">Copyright 2017 Filippo \&quot;Fil\&quot; Bergamo&lt;br/&gt;&lt;br/&gt;This app is Free Software.&lt;br/&gt;It\'s licensed under the terms of &lt;a href=&quot;https://www.gnu.org/licenses/gpl.txt&quot;&gt;GPL v3&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;This app is developed as a contribution to &lt;br/&gt;&lt;a href=&quot;http://www.replicant.us&quot;&gt;The Replicant Project&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;&lt;u&gt;&lt;big&gt;Thank GNUs:&lt;/big&gt;&lt;/u&gt;&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Tibi \&quot;tct\&quot; Turbureanu&lt;/b&gt;&lt;br/&gt;for having done the initial job of porting libre WiFi to Replicant 4.2.&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Wolfgang Wiedmeyer&lt;/b&gt;&lt;br/&gt;for porting libre WiFi to Replicant 6.0 and for helping with the scripts.&lt;br/&gt;&lt;br/&gt;To report on bugs, request features, or any help request, please refer to:&lt;br/&gt;&lt;a href=&quot;http://redmine.replicant.us/projects/replicant/boards&quot;&gt;Replicant\'s Forum&lt;/a&gt;&lt;br/&gt;</string>
+    <string name="menu_config">Settings</string>
+    <string name="msg_interface_not_found">External WiFi adapter not found!\nPlease plug in a supported WiFi adapter and retry.</string>
+    <string name="msg_confirm_delete_network">Are you sure you want to delete this network?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="retry">Retry</string>
+    <string name="msg_root_disabled">Root access is disabled.\n\nSeems like root access is disabled on this device.\nRepWifi needs root access in order to work.\nPlease, enable root access for applications in:\nSettings > Developer options > Root access > "Apps only"\nWhen done so, restart RepWifi and grant the permission to use root, if asked.</string>
+    <string name="msg_root_denied">Root access denied.\nSeems like you denied root access to RepWifi.\nRepWifi needs root access in order to work.\nPlease, restart the application, and grant RepWifi the permission to use root, when asked.</string>
 
 </resources>

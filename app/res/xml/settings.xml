@@ -1,0 +1,12 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <ListPreference
+        android:key="debug_priority"
+        android:title="Log priority"
+        android:id="@+id/pref_debug_prio"
+        android:entries="@array/debug_priority_names"
+        android:entryValues="@array/debug_priority"
+        android:defaultValue="3" />
+
+    
+</PreferenceScreen>

@@ -86,6 +86,7 @@ public class NetworkDetailsActivity extends Activity implements OnCheckedChangeL
 		v.append("\nBSSID: " + this.currentNetwor.getBSSID());
 		
 		long lastused = this.currentNetwor.getLastTimeUsed();
+		
 		if (lastused > 0){
 			Date ts = new Date(lastused);
 			String formstring = "dd-MMM-yyyy kk:mm:ss";
@@ -94,7 +95,8 @@ public class NetworkDetailsActivity extends Activity implements OnCheckedChangeL
 		
 		if (showPassword){
 			v.append("\n\nPassword:\n" + this.currentNetwor.getPassword());
-		}else{
+		}
+		else{
 			v.append("\n\n\n");
 		}
 		
@@ -117,7 +119,7 @@ public class NetworkDetailsActivity extends Activity implements OnCheckedChangeL
 	    dlgAlert.setNegativeButton(no,new DialogInterface.OnClickListener() {
 	        @Override
 			public void onClick(DialogInterface dialog, int whichButton) {
-	        	 //nothing
+	        	 return;
 	        }
 	   });
 	    

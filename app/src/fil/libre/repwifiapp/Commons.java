@@ -75,7 +75,9 @@ public abstract class Commons {
 	}
 	
 	public static SharedPreferences getSettings(){
+		
 		return PreferenceManager.getDefaultSharedPreferences(currentContext);
+		
 	}
 	//----------------------------------------------------
 	
@@ -90,6 +92,7 @@ public abstract class Commons {
 	public static final String EXTRA_DELETE = "ExDelete";
 	
 	public class RequestCode{
+		
 		public static final int NONE = 0;
 		public static final int SELECT_CONN = 1;
 		public static final int PASS_INPUT = 2;
@@ -100,6 +103,7 @@ public abstract class Commons {
 		public static final int SELECT_DETAILS = 7;
 		public static final int DETAILS_SHOW = 8;
 		public static final int NETWORK_DELETE = 9;
+		
 	}
 	//----------------------------------------------------
 	
@@ -114,24 +118,31 @@ public abstract class Commons {
 			return APP_DATA_FOLDER + "/repwifi_storage.conf";
 		}
 	}
+	
 	public static String getScriptScan(){
 		return APP_DATA_FOLDER + "/scan.sh";	
-	}	
+	}
+	
 	public static String getScriptScanRes(){
 		return APP_DATA_FOLDER + "/get_scan_results.sh";
 	}
+	
 	public static String getScriptDhcpcd(){
 		return APP_DATA_FOLDER + "/run_dhcpcd.sh";
 	}
+	
 	public static String getScanFile(){
 		return APP_DATA_FOLDER + "/scanres.txt";
 	}
+	
 	public static String getStatusFile(){
 		return APP_DATA_FOLDER + "/tmpStatus";
 	}
+	
 	public static String getGwFile(){
 		return APP_DATA_FOLDER + "/gw.txt";
 	}
+	
 	public static String getTempOutFile(){
 		return APP_DATA_FOLDER + "/tmpout.txt";
 	}
@@ -144,7 +155,6 @@ public abstract class Commons {
 		currentContext = context;
 		
 		try {
-			
 
 			colorThemeDark = currentContext.getResources().getColor(R.color.ThemeDark);
 			colorThemeLight = currentContext.getResources().getColor(R.color.ThemeLight);
@@ -153,7 +163,6 @@ public abstract class Commons {
 			
 			initEngine();
 			initNetworkStorage();
-					
 			
 			return true;
 			

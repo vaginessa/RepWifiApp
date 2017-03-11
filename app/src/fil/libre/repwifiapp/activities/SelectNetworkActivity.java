@@ -20,15 +20,11 @@
 
 package fil.libre.repwifiapp.activities;
 
-
-
-
 import fil.libre.repwifiapp.Commons;
 import fil.libre.repwifiapp.R;
 import fil.libre.repwifiapp.helpers.AccessPointInfo;
 import fil.libre.repwifiapp.helpers.NetworkButton;
 import fil.libre.repwifiapp.helpers.Utils;
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -60,8 +56,7 @@ public class SelectNetworkActivity extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.activity_select_network, menu);
+		//Suppress menu button
 		return true;
 	}
 	

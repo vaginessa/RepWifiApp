@@ -96,7 +96,8 @@ public class LongTaskActivity extends Activity {
 		
 		case Commons.RequestCode.CONNECT:
 			setTitle("Connecting...");
-			setMessage("Connecting...");			
+			setMessage("Connecting...");
+			
 			//Extract AccessPointInfo
 			input = intent.getExtras().getSerializable(Commons.EXTRA_APINFO);
 			currentNetwork = (AccessPointInfo)input;			
@@ -167,7 +168,7 @@ public class LongTaskActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		//suppress
+		//suppress back button
 	}
 
 

@@ -63,8 +63,7 @@ public class InputPasswordActivity extends Activity implements OnCheckedChangeLi
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		//super.onCreateOptionsMenu(menu);
-		//getMenuInflater().inflate(R.menu.activity_input_password, menu);
+		//disable menu
 		return true;
 	}
 	
@@ -74,12 +73,14 @@ public class InputPasswordActivity extends Activity implements OnCheckedChangeLi
 		if(buttonView == findViewById(R.id.chk_show_pass)){
 			chkShowPassChanged();
 		}		
+		
 	}
 
 	public void onBtnNextClick(View v){
 		
 		EditText txpass = (EditText)findViewById(R.id.txt_password);
 		String pass = txpass.getText().toString();
+		
 		if (pass.length()>0){
 			
 			this.apinfo.setPassword(pass);
@@ -87,11 +88,11 @@ public class InputPasswordActivity extends Activity implements OnCheckedChangeLi
 			Intent intent = new Intent();
 			intent.putExtra(Commons.EXTRA_APINFO, this.apinfo);
 			setResult(RESULT_OK, intent);
+			
 			finish();
 			
 		}
-		
-		
+				
 	}
 	
 	public void chkShowPassChanged(){
@@ -102,9 +103,11 @@ public class InputPasswordActivity extends Activity implements OnCheckedChangeLi
 		if (c.isChecked()){
 			txtPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 			txtPass.setSelection(txtPass.getText().length());
+			
 		}else{
 			txtPass.setInputType(129);
 			txtPass.setSelection(txtPass.getText().length());
+			
 		}
 		
 	}

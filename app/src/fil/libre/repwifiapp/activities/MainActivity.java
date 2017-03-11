@@ -20,12 +20,7 @@
 
 package fil.libre.repwifiapp.activities;
 
-
-
-
-
 import java.io.IOException;
-
 import fil.libre.repwifiapp.Commons;
 import fil.libre.repwifiapp.R;
 import fil.libre.repwifiapp.Commons.RequestCode;
@@ -34,9 +29,7 @@ import fil.libre.repwifiapp.helpers.ConnectionStatus;
 import fil.libre.repwifiapp.helpers.NetworkManager;
 import fil.libre.repwifiapp.helpers.RootCommand;
 import fil.libre.repwifiapp.helpers.Utils;
-
 import android.os.Bundle;
-import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
