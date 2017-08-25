@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/checkmark_frame">
+        
+    </item>
+    <item
+        android:height="3dp"
+        android:top="11dp"
+        android:left="7dp"
+        android:width="10dp">
+        <rotate android:fromDegrees="45" >
+            <shape android:shape="rectangle" >
+                <solid android:color="@color/ThemeLight" />
+            </shape>
+        </rotate>
+    </item>
+    <item
+        android:height="3dp"
+        android:left="12dp"
+        android:top="10dp"
+        android:width="15dp">
+        <rotate android:fromDegrees="-50" >
+            <shape android:shape="rectangle" >
+                <solid android:color="@color/ThemeLight" />
+            </shape>
+        </rotate>
+    </item>
+
+</layer-list>

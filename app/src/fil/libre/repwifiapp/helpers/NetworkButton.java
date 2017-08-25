@@ -23,19 +23,17 @@ package fil.libre.repwifiapp.helpers;
 import android.content.Context;
 import android.widget.Button;
 
-public class NetworkButton extends Button{
+public class NetworkButton extends Button {
 
-	private String _bssid = "";
-	
-	public NetworkButton(Context context, String networkBSSID){
-		super(context);
-		this._bssid = networkBSSID;
-	}
-	
-	public String getNetworkBSSID(){
-		return this._bssid;
-	}
-	
-	
-	
+    private String _bssid = "";
+
+    public NetworkButton(Context context, String networkBSSID) {
+        super(context);
+        this._bssid = networkBSSID;
+    }
+
+    public String getNetworkBSSID() {
+        return this._bssid;
+    }
+
 }

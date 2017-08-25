@@ -20,11 +20,10 @@
 
 package fil.libre.repwifiapp.activities;
 
-
+import fil.libre.repwifiapp.ActivityLauncher;
 import fil.libre.repwifiapp.Commons;
 import fil.libre.repwifiapp.R;
 import fil.libre.repwifiapp.helpers.AccessPointInfo;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,79 +36,79 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
+public class InputPasswordActivity extends Activity implements OnCheckedChangeListener {
 
-public class InputPasswordActivity extends Activity implements OnCheckedChangeListener{
+    AccessPointInfo apinfo = null;
 
-	AccessPointInfo apinfo = null;
-	
-	@Override
-	public void onCreate(Bundle icicle) {
-		super.onCreate(icicle);
+    @Override
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
 
-		setContentView(R.layout.activity_input_password);
-				
-		CheckBox c = (CheckBox)findViewById(R.id.chk_show_pass);
-		c.setOnCheckedChangeListener(this);
-		
-		setTitle("Input password");
-		
-		TextView v = (TextView)findViewById(R.id.txt_insert_pass);
-		
-		//get the network to set password to:
-		this.apinfo = (AccessPointInfo)getIntent().getSerializableExtra(Commons.EXTRA_APINFO);
-		v.append(" " + apinfo.getSSID());
-		
-	}
+        setContentView(R.layout.activity_input_password);
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		//disable menu
-		return true;
-	}
-	
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        CheckBox c = (CheckBox) findViewById(R.id.chk_show_pass);
+        c.setOnCheckedChangeListener(this);
 
-		if(buttonView == findViewById(R.id.chk_show_pass)){
-			chkShowPassChanged();
-		}		
-		
-	}
+        setTitle("Input password");
 
-	public void onBtnNextClick(View v){
-		
-		EditText txpass = (EditText)findViewById(R.id.txt_password);
-		String pass = txpass.getText().toString();
-		
-		if (pass.length()>0){
-			
-			this.apinfo.setPassword(pass);
-			
-			Intent intent = new Intent();
-			intent.putExtra(Commons.EXTRA_APINFO, this.apinfo);
-			setResult(RESULT_OK, intent);
-			
-			finish();
-			
-		}
-				
-	}
-	
-	public void chkShowPassChanged(){
-		
-		CheckBox c = (CheckBox)findViewById(R.id.chk_show_pass);
-		EditText txtPass = (EditText)findViewById(R.id.txt_password);
-		
-		if (c.isChecked()){
-			txtPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-			txtPass.setSelection(txtPass.getText().length());
-			
-		}else{
-			txtPass.setInputType(129);
-			txtPass.setSelection(txtPass.getText().length());
-			
-		}
-		
-	}
+        TextView v = (TextView) findViewById(R.id.txt_insert_pass);
+
+        // get the network to set password to:
+        this.apinfo = (AccessPointInfo) getIntent().getSerializableExtra(
+                        ActivityLauncher.EXTRA_APINFO);
+        v.append(" " + apinfo.getSsid());
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // disable menu
+        return true;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+        if (buttonView == findViewById(R.id.chk_show_pass)) {
+            chkShowPassChanged();
+        }
+
+    }
+
+    public void onBtnNextClick(View v) {
+
+        EditText txpass = (EditText) findViewById(R.id.txt_password);
+        String pass = txpass.getText().toString();
+
+        if (pass.length() == 0) {
+            Commons.showMessage("Password can't be empty!", this);
+        }
+
+        this.apinfo.setPassword(pass);
+
+        Intent intent = new Intent();
+        intent.putExtra(ActivityLauncher.EXTRA_APINFO, this.apinfo);
+        setResult(RESULT_OK, intent);
+
+        finish();
+
+    }
+
+    public void chkShowPassChanged() {
+
+        CheckBox c = (CheckBox) findViewById(R.id.chk_show_pass);
+        EditText txtPass = (EditText) findViewById(R.id.txt_password);
+
+        if (c.isChecked()) {
+            txtPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            txtPass.setSelection(txtPass.getText().length());
+
+        } else {
+            txtPass.setInputType(129);
+            txtPass.setSelection(txtPass.getText().length());
+
+        }
+
+    }
 
 }

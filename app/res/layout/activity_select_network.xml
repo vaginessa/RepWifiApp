@@ -3,56 +3,54 @@
     android:id="@+id/layout_selnets"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     android:padding="15dp"
-    tools:context=".SelectNetworkActivity"
-   	android:background="@color/black" >
-    
-    <TextView 
-	    android:id="@+id/txt_selnets"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_centerHorizontal="true"
-	    android:textColor="@color/ThemeLight"
-	    android:textSize="10pt"
-	    android:maxLines = "5"
-	    android:scrollbars = "vertical"
-	    android:layout_marginBottom="10dp" />
-    
+    tools:context=".SelectNetworkActivity" >
+
+    <TextView
+        android:id="@+id/txt_selnets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:maxLines="5"
+        android:scrollbars="vertical"
+        android:textColor="@color/ThemeLight"
+        android:textSize="10pt" />
+
     <Button
-	    android:id="@+id/btn_rescan"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@id/txt_selnets"
-	    android:paddingLeft="10dp"
-	    android:paddingRight="10dp"
-	    android:layout_centerHorizontal="true"
-	    android:textColor="@color/ThemeLight"
-	    android:background="@color/ThemeDark"
-	    android:text="@string/rescan"
-	    android:onClick="btnScanClick" /> 
+        android:id="@+id/btn_rescan"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txt_selnets"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/repwifi_button"
+        android:onClick="btnScanClick"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/rescan"
+        android:textColor="@color/ThemeLight" />
 
-	<ScrollView
-	    android:id="@+id/scrollview"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:layout_below="@id/btn_rescan"
-	    android:layout_centerHorizontal="true"
-	    android:scrollbars="vertical"
-	    android:fillViewport="true"
-	    android:textColor="@color/ThemeLight"
-	    android:background="@color/White" >
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/btn_rescan"
+        android:layout_centerHorizontal="true"
+        android:background="@color/black"
+        android:fillViewport="true"
+        android:scrollbars="vertical"
+        android:textColor="@color/ThemeLight" >
 
-	    <TableLayout
-	        android:id="@+id/table_networks"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="fill_horizontal"
-	        android:isScrollContainer="true"
-	        android:textColor="@color/ThemeLight"
-	    	android:background="@color/black" >
-	    </TableLayout>
-	    
-	    
-	</ScrollView>
+        <TableLayout
+            android:id="@+id/table_networks"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
+            android:background="@color/black"
+            android:isScrollContainer="true"
+            android:textColor="@color/ThemeLight" >
+        </TableLayout>
+    </ScrollView>
 
 </RelativeLayout>
