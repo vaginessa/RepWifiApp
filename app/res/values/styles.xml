@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
+    <style name="AppBaseTheme" parent="android:Theme.Holo">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -15,7 +15,57 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
+
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:itemBackground">@color/Anthracite</item>
+        <item name="android:actionMenuTextColor">@color/ThemeLight</item>
+        <item name="android:itemTextAppearance">@style/TextAppearanceMenu</item>
+        <item name="android:listChoiceIndicatorMultiple">@drawable/repwifi_checkbox</item>
+        <item name="android:listDivider">@color/ThemeDark</item>
+        <item name="android:dividerHeight">1dp</item>
     </style>
+
+    <style name="TextAppearanceMenu">
+        <item name="android:textColor">@color/ThemeLight</item>
+	</style>
+
+    <style name="Theme.SettingsTheme" parent="@style/AppTheme"> <!-- "@android:style/Theme.Holo" -->
+        <item name="android:windowBackground">@color/Anthracite</item>
+        <item name="android:textColor">@color/ThemeLight</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:alertDialogTheme">@style/Theme.RepWifiDialogTheme</item>
+        <item name="android:listChoiceIndicatorMultiple">@drawable/repwifi_checkbox</item>
+    </style>
+
+    <style name="listViewPrefs" parent="@android:style/Widget.ListView">
+        <item name="android:background">@color/Anthracite</item>
+        <item name="android:textColor">@color/ThemeLight</item>
+        <item name="android:cacheColorHint">@color/Anthracite</item>
+    </style>
+
+    <style name="RepWifi.BorderlessButton" parent="@android:style/Widget.Holo.Button.Borderless">
+        <item name="android:textColor">@color/ThemeLight</item>
+        <item name="android:background">@drawable/repwifi_button</item>
+    </style>
+
+    <style name="RepWifi.ButtonBar.AlertDialog" parent="@android:style/Holo.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/ThemeLight</item>
+        <item name="android:background">@color/ThemeDark</item>
+    </style>
+
+    <!-- dialog theme -->
+    <style name="Theme.RepWifiDialogTheme" parent="@android:style/Theme.Holo.Dialog"> 
+        <item name="android:textColor">@color/ThemeLight</item>
+        <item name="android:textColorPrimary">@color/ThemeLight</item>
+        <item name="android:textColorSecondary">@color/ThemeDark</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:borderlessButtonStyle">@style/RepWifi.BorderlessButton</item>
+        <item name="android:buttonStyle">@style/RepWifi.BorderlessButton</item>
+        <item name="android:buttonBarStyle">@style/RepWifi.ButtonBar.AlertDialog</item>
+        <item name="android:listViewStyle">@style/listViewPrefs</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:listChoiceIndicatorSingle">@drawable/repwifi_radiobutton</item>
+    </style>
+
 
 </resources>

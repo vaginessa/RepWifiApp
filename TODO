@@ -1,5 +1,9 @@
-*) Research on the way to "trick" the system into thinking wifi is connected.
-*) Replace string literals with @string resources.
-*) [LOW-priority] Research on udev support in Replicant, to load the app when the dongle gets plugged in.
-*) [LOW-priority] Implement and test specific behavior for Replicant 4.2
-*) [LOW-priority] Introduce support for WEP-secured networks.
+TODO
+as of 2017-08-25
+
+*) clean up engine's code
+*) turn backend engine into a service
+*) introduce support for EAP authentication (if possible at all)
+*) publish on fdroid
+*) clean up xml styling files
+*) replace all string litterals with @string resoruces

@@ -1,0 +1,18 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ListPreference
+        android:id="@+id/pref_debug_prio"
+        android:defaultValue="3"
+        android:entries="@array/debug_priority_names"
+        android:entryValues="@array/debug_priority"
+        android:key="debug_priority"
+        android:title="Log priority"
+        android:divider="@drawable/divider_shape" />
+    
+    <Preference android:title="Reset back-end engine"
+                android:key="pref_kill_backend"
+                android:summary="@string/summary_kill_backend"
+                android:background="@drawable/button_bg"
+                android:textColor="@color/ThemeLight" />
+    
+</PreferenceScreen>

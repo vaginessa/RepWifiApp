@@ -21,447 +21,447 @@
 package fil.libre.repwifiapp.activities;
 
 import java.io.IOException;
+import java.net.SocketException;
+import fil.libre.repwifiapp.ActivityLauncher;
 import fil.libre.repwifiapp.Commons;
 import fil.libre.repwifiapp.R;
-import fil.libre.repwifiapp.Commons.RequestCode;
+import fil.libre.repwifiapp.ActivityLauncher.RequestCode;
 import fil.libre.repwifiapp.helpers.AccessPointInfo;
 import fil.libre.repwifiapp.helpers.ConnectionStatus;
 import fil.libre.repwifiapp.helpers.NetworkManager;
 import fil.libre.repwifiapp.helpers.RootCommand;
 import fil.libre.repwifiapp.helpers.Utils;
 import android.os.Bundle;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.hardware.usb.UsbManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity{
-	
-	private AlertDialog diag;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+public class MainActivity extends MenuEnabledActivity {
 
-		if(! Commons.init(this)){
-			Utils.logDebug("Failed to initialize Commons. Aborting.");
-			finish();
-			return;
-		}
-		
-		setImage();
+    private ActivityLauncher launcher = new ActivityLauncher(this);
+    private BroadcastReceiver detachReceiver;
 
-		//checkConnectionStatus();
-							
-	}
-	
-	@Override
-	public void onStart(){
-		super.onStart();
-		Utils.logDebug("Main onStart()");
-		
-		checkConditions();
-		
-		ConnectionStatus status = Commons.connectionEngine.getConnectionStatus();
-		if (status != null && status.isConnected()){
-			Utils.logDebug("Main about to launch status activity...");
-			launchStatusActivity(status);
-		}
-		
-		Utils.logDebug("Main onStart() returning.");
-			
-	}
-	
-	@Override
-	public void onStop(){
-		super.onStop();
-		
-		if (this.diag != null){
-			this.diag.dismiss();
-		}
-		
-	}
-	
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	    case R.id.menu_credits:
-	        launchCreditsActivity();
-	        break;
-	        
-	    case R.id.menu_config:
-	    	launchSettingsActivity();
-	    	break;
-	    
-	    default:
-	       	break;
-	    }
-	    
-	    return true;
-	}
-	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent intent){
-		
-		Utils.logDebug("Main onActivityResult(): ",1);
-		
-		if (intent == null){
-			return;
-		}
-		
-		if (resultCode != RESULT_OK){
-			return;
-		}
-		
-		AccessPointInfo i = null;
-		if (intent.hasExtra(Commons.EXTRA_APINFO)){
-			i = (AccessPointInfo)intent.getExtras().getSerializable(Commons.EXTRA_APINFO); 
-		}
-		
-		switch (requestCode) {
-		
-		case RequestCode.PASS_INPUT:
-			handleResultSetPass(i);
-			break;
+        if (!Commons.init(this)) {
+            Utils.logDebug("Failed to initialize Commons. Aborting.");
+            finish();
+            return;
+        }
 
-		case RequestCode.SELECT_CONN:
-			boolean rescan = intent.getExtras().getBoolean(Commons.EXTRA_RESCAN);
-			handleResultSelect(i, rescan);
-			break;
-			
-		case RequestCode.CONNECT:
-			boolean conres = intent.getExtras().getBoolean(Commons.EXTRA_BOOLEAN);
-			handleFinishedConnecting(conres, i);			
-			break;
-			
-		case RequestCode.STATUS_GET:
-			ConnectionStatus status = (ConnectionStatus)intent.getExtras().getSerializable(Commons.EXTRA_CONSTATUS);
-			handleResultGetStatus(status);
-			break;
-			
-		case RequestCode.NETWORKS_GET:
-			AccessPointInfo[] nets = (AccessPointInfo[])intent.getExtras().getSerializable(Commons.EXTRA_APINFO_ARR);
-			launchSelectActivity(nets, true);
-						
-		case RequestCode.STATUS_SHOW:
-			//do nothing			
-			break;
-			
-		case RequestCode.SELECT_DETAILS:
-			launchDetailsActivity(i);
-			break;
-			
-		case RequestCode.DETAILS_SHOW:
-			boolean del = intent.getExtras().getBoolean(Commons.EXTRA_DELETE);
-			if (del){ deleteNetwork(i);	}
-			break;
-			
-		default:
-								
-			break;
-			
-		}
-		
-		
-	}
-	
-	private void setImage(){
-		
-		ImageView img = (ImageView)findViewById(R.id.img_logo);
-		
-		try {
-			Drawable d = Drawable.createFromStream(getAssets().open("repwifi-logo-0.png"),null);
-			img.setImageDrawable(d);
-		} catch (IOException e) {
-			Utils.logError("Error while loading logo image",e);
-		}
-		
-	}
-	
+        setImage();
+        setUsbDeviceMonitor();
+    }
 
-	private void handleResultSelect(AccessPointInfo i, boolean rescan){
-		
-		if (rescan){
-			
-			doScan();
-			
-		}else if (i != null){
-			
-			if (i.needsPassword()){
-			
-				//try to fetch network's password from storage
-				AccessPointInfo fromStorage = Commons.storage.getSavedNetwork(i);
-				if (fromStorage == null){
-					
-					launchPasswordActivity(i);
-					return;
-					
-				}else{
-					//use fetched network
-					i = fromStorage;
-				}
-				
-			}
+    @Override
+    public void onStart() {
+        super.onStart();
+        Utils.logDebug("Main onStart()");
 
-			connectToNetwork(i);
-		}
-		
-	}
-	
-	private void handleResultSetPass(AccessPointInfo i){
-		connectToNetwork(i);
-	}
-		
-	private void handleResultGetStatus(ConnectionStatus status){
-		if (status != null && status.isConnected()){
-			launchStatusActivity(status);
-		}
-	}
+        Commons.updateNotification(this);
 
-	private void handleFinishedConnecting(boolean connectionResult, AccessPointInfo info){
-		
-		if(connectionResult && info.needsPassword()){
-			
-			//Save network
-			if (Commons.storage.save(info)){
-				Toast toast2 = Toast.makeText(getApplicationContext(), "Network Saved!",Toast.LENGTH_LONG);
-				toast2.show();				
-				
-			}else {
-				Toast toast2 = Toast.makeText(getApplicationContext(), "FAILED to save network!",Toast.LENGTH_LONG);
-				toast2.show();
-			}
-			
-			checkConnectionStatus();
-						
-		}else{
-			//alert that connection failed
-			Toast toast = Toast.makeText(getApplicationContext(), "FAILED to connect!", Toast.LENGTH_LONG);
-			toast.show();
-		}
-	}
-	
-	private void launchPasswordActivity(AccessPointInfo info){
-		
-		Intent intent = new Intent();
-		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		intent.setClass(getApplicationContext(), InputPasswordActivity.class);
-		intent.putExtra(Commons.EXTRA_APINFO, info);
-		
-		startActivityForResult(intent, RequestCode.PASS_INPUT);
-		
-	}
-	
-	private void launchStatusActivity(ConnectionStatus status){
-		
-		Intent intent = new Intent();
-		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		intent.putExtra(Commons.EXTRA_CONSTATUS, status);
-		intent.setClass(getApplicationContext(), ShowStatusActivity.class);
-		startActivityForResult(intent, RequestCode.STATUS_SHOW);
-		
-	}
+        if (handleIntent()) {
+            // app called for a specific intent.
+            // avoid any other task.
+            Log.d("RepWifi", "handleIntent returned true");
+            return;
+        }
 
-	private void launchSelectActivity(AccessPointInfo[] nets,boolean forConnection){
-	
-		Intent intent = new Intent(this, SelectNetworkActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		intent.putExtra(Commons.EXTRA_APINFO_ARR, nets);
-		
-		if (forConnection){
-			intent.putExtra(Commons.EXTRA_REQCODE, RequestCode.SELECT_CONN);
-			startActivityForResult(intent, RequestCode.SELECT_CONN);
-		}
-		else{
-			intent.putExtra(Commons.EXTRA_REQCODE, RequestCode.SELECT_DETAILS);
-			startActivityForResult(intent, RequestCode.SELECT_DETAILS);
-		}
-		
-	}
-	
-	private void launchDetailsActivity(AccessPointInfo info){
-		
-		Intent intent = new Intent(this, NetworkDetailsActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		intent.putExtra(Commons.EXTRA_APINFO, info);
-		startActivityForResult(intent, RequestCode.DETAILS_SHOW);
-		
-	}
-	
-	private void launchCreditsActivity(){
-		Intent intent = new Intent(this, CreditsActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		startActivityForResult(intent, RequestCode.NONE);
-	}
-	
-	private void launchSettingsActivity() {
-		Intent intent = new Intent(this, SettingsActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		startActivity(intent);
-	}
-	
-	private void deleteNetwork(AccessPointInfo info){
-		
-		NetworkManager manager = new NetworkManager(Commons.getNetworkStorageFile());
-		String msg = "";
-		if (manager.remove(info)){
-			msg = "Network info deleted!";
-		}else{
-			msg = "FAILED to delete network info!";
-		}
-		
-		Toast toast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
-		toast.show();
-		
-	}
-	
-	private void connectToNetwork(AccessPointInfo info){
-		
-		Intent intent = new Intent(this, LongTaskActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		intent.putExtra(Commons.EXTRA_REQCODE, RequestCode.CONNECT);
-		intent.putExtra(Commons.EXTRA_APINFO, info);
-		startActivityForResult(intent, RequestCode.CONNECT);
-				
-	}
-	
-	private void checkConnectionStatus(){
-		
-		Intent intent = new Intent(this, LongTaskActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		intent.putExtra(Commons.EXTRA_REQCODE, RequestCode.STATUS_GET);
-		startActivityForResult(intent, RequestCode.STATUS_GET);
-		
-	}
-	
-	private boolean checkConditions(){
-		return (checkRootEnabled() && checkInterface());
-	}
-	
-	private boolean checkInterface(){
-		
-		boolean res = Commons.connectionEngine.isInterfaceAvailable(Commons.INTERFACE_NAME);
-				
-		if(res == false ){
-			String msg = getResources().getString(R.string.msg_interface_not_found);
-			showMessage(msg);
-		}
-		
-		return res;
-				
-	}
-	
-	private boolean checkRootEnabled(){
-		
-		boolean result = false;
-		String msg = "Unknown Root error";
-		RootCommand su = new RootCommand(null);
-		
-		int excode = -1;
-		
-		try {
-			excode = su.execute();
-		} catch (Exception e) {
-			Utils.logError("Error while trying to get first Super User access.",e);
-			excode = -1;
-			result = false;
-		}
-			
-		switch (excode) {
-			case 0:
-				result = true;
-				break;
-				
-			case Commons.EXCOD_ROOT_DENIED:
-				result = false;
-				msg = getResources().getString(R.string.msg_root_denied);
-				break;
-				
-			case Commons.EXCOD_ROOT_DISABLED:
-				result = false;
-				msg = getResources().getString(R.string.msg_root_disabled);
-				break;
-				
-			default:
-				result = false;
-				msg = "Unknown Root error.\nExit code " + excode;
-				break;
-		}
-		
-		if (!result){
-			showMessage(msg);
-		}
+        checkConditions();
 
-		return result;
-				
-	}
-	
-	private void doScan(){
-		
-		if (!checkConditions()){
-			return;
-		}
-		
-		Intent intent = new Intent(this, LongTaskActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		intent.putExtra(Commons.EXTRA_REQCODE, RequestCode.NETWORKS_GET);
-		startActivityForResult(intent, RequestCode.NETWORKS_GET);
-				
-	}
-	
-	public void btnScanClick(View v){
+        ConnectionStatus status = Commons.connectionEngine.getConnectionStatus();
+        if (status != null && status.isConnected()) {
+            Utils.logDebug("Main about to launch status activity...");
+            launcher.launchStatusActivity(status);
+        }
 
-		doScan();
+        Utils.logDebug("Main onStart() returning.");
 
-	}
+    }
 
-	public void btnManageClick(View v){
+    private boolean handleIntent() {
 
-		NetworkManager manager = new NetworkManager(Commons.getNetworkStorageFile());
-		AccessPointInfo[] infos = manager.getKnownNetworks();
-		
-		if (infos == null || infos.length == 0){
-			Toast toast = Toast.makeText(this, "No saved network", Toast.LENGTH_LONG);
-			toast.show();
-		}
-		else{
-			launchSelectActivity(infos, false);
-		}
-		
-	}
-	
-	private void showMessage(String msg){
-		
-		AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);                      
-	    dlgAlert.setMessage(msg); 
-	    dlgAlert.setPositiveButton("OK",new DialogInterface.OnClickListener() {
-	        @Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-	        	return;
-	        }
-	    });
-	    
-	    dlgAlert.setCancelable(false);
-	    this.diag = dlgAlert.create();
-	    this.diag.show();
-	    
-	}
-		
+        Intent i = getIntent();
+        if (i != null && i.hasExtra(ActivityLauncher.EXTRA_REQCODE)) {
+
+            switch (i.getIntExtra(ActivityLauncher.EXTRA_REQCODE, -1)) {
+
+            case RequestCode.NONE:
+                moveTaskToBack(true);
+
+                break;
+
+            default:
+                break;
+            }
+
+            return true;
+
+        } else {
+            // no intent to handle.
+            return false;
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        Utils.logDebug("Main onActivityResult(): ", 1);
+
+        if (intent == null) {
+            return;
+        }
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        AccessPointInfo i = null;
+        if (intent.hasExtra(ActivityLauncher.EXTRA_APINFO)) {
+            Bundle xtras = intent.getExtras();
+            i = (AccessPointInfo) xtras.getSerializable(ActivityLauncher.EXTRA_APINFO);
+        }
+
+        switch (requestCode) {
+
+        case RequestCode.PASS_INPUT:
+            handleResultSetPass(i);
+            break;
+
+        case RequestCode.SELECT_CONN:
+            boolean rescan = intent.getExtras().getBoolean(ActivityLauncher.EXTRA_RESCAN);
+            handleResultSelect(i, rescan);
+            break;
+
+        case RequestCode.CONNECT:
+            boolean conres = intent.getExtras().getBoolean(ActivityLauncher.EXTRA_BOOLEAN);
+            handleFinishedConnecting(conres, i);
+            break;
+
+        case RequestCode.STATUS_GET:
+            ConnectionStatus status = (ConnectionStatus) intent.getExtras().getSerializable(
+                            ActivityLauncher.EXTRA_CONSTATUS);
+            handleResultGetStatus(status);
+            break;
+
+        case RequestCode.NETWORKS_GET:
+            AccessPointInfo[] nets = (AccessPointInfo[]) intent.getExtras().getSerializable(
+                            ActivityLauncher.EXTRA_APINFO_ARR);
+            launcher.launchSelectActivity(nets, true, false);
+
+        case RequestCode.STATUS_SHOW:
+            // do nothing
+            break;
+
+        case RequestCode.SELECT_DETAILS:
+            launcher.launchDetailsActivity(i);
+            break;
+
+        case RequestCode.DETAILS_SHOW:
+            boolean del = intent.getExtras().getBoolean(ActivityLauncher.EXTRA_DELETE);
+            if (del) {
+                deleteNetwork(i);
+            }
+            break;
+
+        case RequestCode.CONNECT_HIDDEN:
+
+            if (i != null) {
+                handleResultSelect(i, false);
+            }
+            break;
+
+        default:
+
+            break;
+
+        }
+
+    }
+
+    private void setImage() {
+
+        ImageView img = (ImageView) findViewById(R.id.img_logo);
+
+        try {
+            Drawable d = Drawable.createFromStream(getAssets().open("repwifi-logo-0.png"), null);
+            img.setImageDrawable(d);
+        } catch (IOException e) {
+            Utils.logError("Error while loading logo image", e);
+        }
+
+    }
+
+    private void setUsbDeviceMonitor() {
+        detachReceiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
+                    handleUsbEvent(true);
+                } else if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
+                    handleUsbEvent(false);
+                }
+            }
+        };
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        registerReceiver(detachReceiver, filter);
+
+        IntentFilter filt2 = new IntentFilter();
+        filt2.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        registerReceiver(detachReceiver, filt2);
+    }
+
+    private boolean checkConditions() {
+        return (checkRootEnabled() && checkInterface(true));
+    }
+
+    private boolean checkInterface(boolean alert) {
+
+        boolean res = false;
+        String msg = "";
+
+        try {
+            res = Commons.connectionEngine.isInterfaceAvailable(Commons.INTERFACE_NAME);
+        } catch (SocketException e) {
+            Utils.logError("SocketException during isInterfaceAvailable()", e);
+            msg = "Error while retrieving interface list!";
+            res = false;
+        }
+
+        if (res == false && alert) {
+            msg = getResources().getString(R.string.msg_interface_not_found);
+            Commons.showMessage(msg, this);
+        }
+
+        return res;
+
+    }
+
+    private boolean checkRootEnabled() {
+
+        boolean result = false;
+        String msg = "Unknown Root error";
+        RootCommand su = new RootCommand(null);
+
+        int excode = -1;
+
+        try {
+            excode = su.execute();
+        } catch (Exception e) {
+            Utils.logError("Error while trying to get first Super User access.", e);
+            excode = -1;
+            result = false;
+        }
+
+        switch (excode) {
+        case 0:
+            result = true;
+            break;
+
+        case Commons.EXCOD_ROOT_DENIED:
+            result = false;
+            msg = getResources().getString(R.string.msg_root_denied);
+            break;
+
+        case Commons.EXCOD_ROOT_DISABLED:
+            result = false;
+            msg = getResources().getString(R.string.msg_root_disabled);
+            break;
+
+        default:
+            result = false;
+            msg = "Unknown Root error.\nExit code " + excode;
+            break;
+        }
+
+        if (!result) {
+            Commons.showMessage(msg, this);
+        }
+
+        return result;
+
+    }
+
+    private void handleResultSelect(AccessPointInfo i, boolean rescan) {
+
+        if (rescan) {
+
+            doScan();
+
+        } else if (i != null) {
+
+            if (i.needsPassword()) {
+
+                // try to fetch network's password from storage
+                AccessPointInfo fromStorage = Commons.storage.getSavedNetwork(i);
+                if (fromStorage == null) {
+
+                    launcher.launchPasswordActivity(i);
+                    return;
+
+                } else {
+                    // use fetched network
+                    i = fromStorage;
+                }
+
+            }
+
+            launcher.launchLongTaskActivityConnect(i);
+        }
+
+    }
+
+    private void handleResultSetPass(AccessPointInfo i) {
+        launcher.launchLongTaskActivityConnect(i);
+    }
+
+    private void handleResultGetStatus(ConnectionStatus status) {
+        if (status != null && status.isConnected()) {
+            launcher.launchStatusActivity(status);
+        }
+    }
+
+    private void handleFinishedConnecting(boolean connectionResult, AccessPointInfo info) {
+
+        if (connectionResult && info.needsPassword()) {
+
+            ConnectionStatus status = Commons.connectionEngine.getConnectionStatus();
+            if (status != null) {
+                // update APinfo with the right BSSID
+                info.setBssid(status.BSSID);
+            }
+
+            // Save network
+            if (Commons.storage.save(info)) {
+                Toast toast2 = Toast.makeText(getApplicationContext(), "Network Saved!",
+                                Toast.LENGTH_LONG);
+                toast2.show();
+
+            } else {
+                Toast toast2 = Toast.makeText(getApplicationContext(), "FAILED to save network!",
+                                Toast.LENGTH_LONG);
+                toast2.show();
+            }
+
+            // show status
+            launcher.launchStatusActivity(status);
+
+        } else {
+            // alert that connection failed
+            Toast toast = Toast.makeText(getApplicationContext(), "FAILED to connect!",
+                            Toast.LENGTH_LONG);
+            toast.show();
+        }
+    }
+
+    private void deleteNetwork(AccessPointInfo info) {
+
+        NetworkManager manager = new NetworkManager(Commons.getNetworkStorageFile());
+        String msg = "";
+        if (manager.remove(info)) {
+            msg = "Network info deleted!";
+        } else {
+            msg = "FAILED to delete network info!";
+        }
+
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+        toast.show();
+
+    }
+
+    private void handleUsbEvent(boolean detached) {
+
+        if (detached && !checkInterface(false)) {
+            // device disconnected, update the status bar:
+            Commons.updateNotification(this);
+
+        } else if (Commons.isAutoConnectEnabled()) {
+
+            try {
+
+                // waits for a maximum of WAIT_ON_USB_ATTACHED milliseconds
+                // to let the interface being registered.
+                int msWaited = 0;
+                while (msWaited < Commons.WAIT_ON_USB_ATTACHED) {
+
+                    Thread.sleep(100);
+                    msWaited += 100;
+
+                    if (checkInterface(false)) {
+                        autoConnect();
+                        return;
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                // ignores and exits;
+                return;
+            }
+
+        }
+
+    }
+
+    private void autoConnect() {
+
+        try {
+
+            AccessPointInfo[] nets = Commons.connectionEngine.getAvailableNetworks();
+            if (nets == null || nets.length == 0) {
+                return;
+            }
+
+            for (AccessPointInfo i : nets) {
+
+                if (Commons.storage.isKnown(i)) {
+                    launcher.launchLongTaskActivityConnect(i);
+                    return;
+                }
+
+            }
+
+            // if no network is known, shows available networks to the user.
+            launcher.launchSelectActivity(nets, true, false);
+
+        } catch (Exception e) {
+            Utils.logError("Error while autoconnecting", e);
+            Commons.showMessage("An error occured while trying to auto-connect", this);
+        }
+
+    }
+
+    private void doScan() {
+        if (checkConditions()) {
+            launcher.launchLongTaskActivityScan();
+        }
+    }
+
+    public void btnScanClick(View v) {
+        doScan();
+    }
+
+    public void btnHiddenClick(View v) {
+
+        if (checkConditions()) {
+            launcher.launchInputSsidActivity();
+        }
+
+    }
+
+    public void btnManageClick(View v) {
+        launcher.launchSelectActivity(null, false, true);
+    }
+
 }

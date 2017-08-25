@@ -1,15 +1,19 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:divider="@drawable/divider_shape"
+    android:dividerHeight="2pt"
+    android:textColor="@color/ThemeLight" >
 
     <item
-        android:id="@+id/menu_credits"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/menu_credits" />
-    
-    <item
         android:id="@+id/menu_config"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:showAsAction="never"
-        android:title="@string/menu_config" />
+        android:textColor="@color/ThemeLight"
+        android:title="@string/menu_config"/>
+    <item
+        android:id="@+id/menu_credits"
+        android:orderInCategory="2"
+        android:showAsAction="never"
+        android:textColor="@color/ThemeLight"
+        android:title="@string/menu_credits"/>
 
 </menu>

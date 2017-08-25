@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <EditTextPreference 
+        android:id="@+id/pref_dns1"
+        android:defaultValue="@string/dns1_default"
+        android:key="dns1"
+        android:summary="Set the IPv4 address of the primary DNS server.\nIf left blank, RepWifi will try to use the default gateway as a DNS resolver."
+        android:title="DNS server #1"
+        android:textColor="@color/ThemeLight"
+        android:background="@color/ThemeDark"
+        android:padding="5dp"/>
+    
+    
+    <EditTextPreference 
+        android:id="@+id/pref_dns2"
+        android:defaultValue="@string/dns2_default"
+        android:key="dns2"
+        android:summary="Set the IPv4 address of the secondary DNS server.\nIf the primary address is blank, this will be ignored."
+        android:title="DNS server #2"
+        android:textColor="@color/ThemeLight"
+        android:background="@color/ThemeDark"
+        android:padding="5dp"/>
+    
+    <CheckBoxPreference
+        android:id="@+id/pref_autoconnect"
+        android:defaultValue="false"
+        android:key="enable_autoconnect"
+        android:summary="When the WiFi dongle is attached, RepWifi connects automatically to reachable known networks.\n(Experimental)."
+        android:title="Enable Autoconnect" />
+    
+    <CheckBoxPreference
+        android:id="@+id/pref_progbar"
+        android:defaultValue="true"
+        android:key="enable_progbar"
+        android:summary="Show an animated progress bar while doing long background tasks.\nKeep it disabled to (hopefully) save some extra power for the WiFi dongle."
+        android:title="Animated progress bar" />
+    
+    <CheckBoxPreference
+        android:id="@+id/pref_autostart"
+        android:defaultValue="false"
+        android:key="enable_autostart"
+        android:summary="If checked, RepWifi is started automatically on system's startup."
+        android:title="Enable Start at Boot" />
+        
+    <Preference android:title="Restore Defaults"
+                android:key="pref_restore_default"
+                android:summary="click to restore default settings\n(then return to main screen to apply the reset)"
+                android:background="@drawable/button_bg"
+                android:textColor="@color/ThemeLight" />
+    
+</PreferenceScreen>

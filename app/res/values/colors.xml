@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>    
+<resources>
+
     <color name="ThemeLight">#FFA500</color>
     <color name="ThemeDark">#5F021F</color>
+    <color name="ThemeDarkSecondary">#5f0230</color>
     <color name="black">#000000</color>
     <color name="White">#FFFFFF</color>
+    <color name="Transparent">#00000000</color>
+    <color name="Anthracite">#181818</color>
+
 </resources>

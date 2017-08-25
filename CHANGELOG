@@ -1,3 +1,13 @@
+## [v0.5] - 2017-08-25
+* removed dependency on prebuilt android-support-v4.jar.
+* introduced support for hidden networks.
+* introduced auto-connect feature when plugging the dongle.
+* introduced top-bar notifications about connection state.
+* made major graphic improvements.
+* introduced DNS settings available to the user (uses the gateway as DNS, if primary DNS is left blak).
+* app loaded at system startup.
+* definitively dropped support for Replicant 4.2
+
 ## [0.0.9(1)] - 2016-03-11 
 *) enabled debug settings -> log priority level
 *) added warnings for root disabled/denied

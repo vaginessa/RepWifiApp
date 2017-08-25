@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp"
     android:background="@color/black"
+    android:padding="15dp"
     tools:context=".ShowStatusActivity" >
 
     <TextView
@@ -13,31 +13,31 @@
         android:layout_centerHorizontal="true"
         android:background="@color/black"
         android:textColor="@color/ThemeLight" />
-    
-    <Button 
+
+    <Button
         android:id="@+id/btn_disconnect"
-        android:background="@color/ThemeDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/txt_status"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_marginTop="10dp"
-        android:textColor="@color/ThemeLight"
+        android:background="@drawable/repwifi_button"
+        android:onClick="onBtnDisconnectClick"
         android:text="@string/disconnect"
-        android:onClick="onBtnDisconnectClick"/>
-    
-    <Button 
+        android:textColor="@color/ThemeLight" />
+
+    <Button
         android:id="@+id/btn_back"
-        android:background="@color/ThemeDark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/txt_status"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_marginTop="10dp"
-        android:textColor="@color/ThemeLight"
+        android:background="@drawable/repwifi_button"
+        android:onClick="onBtnMainClick"
         android:text="@string/back_main"
-        android:onClick="onBtnMainClick"/>
+        android:textColor="@color/ThemeLight" />
 
 </RelativeLayout>

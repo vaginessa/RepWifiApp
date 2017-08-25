@@ -22,85 +22,82 @@ package fil.libre.repwifiapp.helpers;
 
 import java.io.Serializable;
 
-public class ConnectionStatus implements Serializable{
+public class ConnectionStatus implements Serializable {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	public static final String STATUS_CONNECTED = "COMPLETED";
-	public static final String STATUS_INACTIVE = "INACTIVE";
-	public static final String STATUS_DISCONNECTED = "DISCONNECTED";
-	public static final String STATUS_UNDEFINED = "UNDEFINED";
-	
-	public String status;
-	public String SSID;
-	public String BSSID;
-	public String IP;
-	
-	private static final String F_SEP = "=";
-	private static final String KeyStatus = "wpa_state";
-	private static final String KeySSID = "ssid";
-	private static final String KeyBSSID = "bssid";
-	private static final String KeyIP = "ip_address";
-	
-	public static ConnectionStatus parseWpaCliOutput(String wpaCliOutput){
-		
-		if (wpaCliOutput == null){
-			return null;
-		}
-		
-		if (wpaCliOutput.trim().length() == 0){
-			return null;
-		}
-		
-		String[] lines = wpaCliOutput.split("\n");
-		
-		ConnectionStatus s = new ConnectionStatus();
-		for(String line : lines){
-			
-			if (line.trim().equals("")){
-				continue;
-			}
-			
-			String[] fields = line.split(F_SEP);
-			if(fields.length < 2){
-				continue;
-			}
-			
-			String key = fields[0];
-			String val = fields[1];
-			
-			if (key.equals(KeyBSSID)){
-				s.BSSID = val;
-			}
-			else if (key.equals(KeySSID)){
-				s.SSID = val;
-			}
-			else if (key.equals(KeyStatus)){
-				s.status = val;
-			}
-			else if (key.equals(KeyIP)){
-				s.IP = val;
-			}
-			
-		}
-		
-		return s;
-				
-	}
-	
-	public boolean isConnected(){
-		
-		if (this.status == null){
-			return false;
-		}
-		
-		if (this.status.equals(STATUS_CONNECTED)){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
+    private static final long serialVersionUID = 1L;
+    public static final String STATUS_CONNECTED = "COMPLETED";
+    public static final String STATUS_INACTIVE = "INACTIVE";
+    public static final String STATUS_DISCONNECTED = "DISCONNECTED";
+    public static final String STATUS_UNDEFINED = "UNDEFINED";
+
+    public String status;
+    public String SSID;
+    public String BSSID;
+    public String IP;
+
+    private static final String F_SEP = "=";
+    private static final String KeyStatus = "wpa_state";
+    private static final String KeySSID = "ssid";
+    private static final String KeyBSSID = "bssid";
+    private static final String KeyIP = "ip_address";
+
+    public static ConnectionStatus parseWpaCliOutput(String wpaCliOutput) {
+
+        if (wpaCliOutput == null) {
+            return null;
+        }
+
+        if (wpaCliOutput.trim().length() == 0) {
+            return null;
+        }
+
+        String[] lines = wpaCliOutput.split("\n");
+
+        ConnectionStatus s = new ConnectionStatus();
+        for (String line : lines) {
+
+            if (line.trim().equals("")) {
+                continue;
+            }
+
+            String[] fields = line.split(F_SEP);
+            if (fields.length < 2) {
+                continue;
+            }
+
+            String key = fields[0];
+            String val = fields[1];
+
+            if (key.equals(KeyBSSID)) {
+                s.BSSID = val;
+            } else if (key.equals(KeySSID)) {
+                s.SSID = val;
+            } else if (key.equals(KeyStatus)) {
+                s.status = val;
+            } else if (key.equals(KeyIP)) {
+                s.IP = val;
+            }
+
+        }
+
+        return s;
+
+    }
+
+    public boolean isConnected() {
+
+        if (this.status == null) {
+            return false;
+        }
+
+        if (this.status.equals(STATUS_CONNECTED)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

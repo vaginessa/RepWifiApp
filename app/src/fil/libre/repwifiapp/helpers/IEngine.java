@@ -20,25 +20,26 @@
 
 package fil.libre.repwifiapp.helpers;
 
+import java.net.SocketException;
 
 public interface IEngine {
-	
-	public boolean startWpaSupplicant();
-	
-	public boolean killPreviousConnections();
-	
-	public boolean clearWorkingDir();
-		
-	public AccessPointInfo[] getAvailableNetworks();
-	
-	public boolean connect(AccessPointInfo info);
-	
-	public boolean disconnect();
-	
-	public ConnectionStatus getConnectionStatus();
-	
-	public boolean isInterfaceAvailable(String ifaceName);
-	
-	public String[] getAvailableInterfaces();	
-	
+
+    public boolean startWpaSupplicant();
+
+    public boolean killBackEndProcesses();
+
+    public boolean clearWorkingDir();
+
+    public AccessPointInfo[] getAvailableNetworks();
+
+    public boolean connect(AccessPointInfo info);
+
+    public boolean disconnect();
+
+    public ConnectionStatus getConnectionStatus();
+
+    public boolean isInterfaceAvailable(String ifaceName) throws SocketException;
+
+    public String[] getAvailableInterfaces();
+
 }
